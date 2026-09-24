@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="880" viewBox="0 0 1240 880" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <linearGradient id="hdr" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1240" height="880" fill="#f8fafc"/>
+  <rect width="1240" height="78" fill="url(#hdr)"/>
+  <text x="30" y="34" fill="#f8fafc" font-size="24" font-weight="700">Sentinel — Two-Stage PPE Compliance Architecture</text>
+  <text x="30" y="60" fill="#94a3b8" font-size="14">Person-grounded detection → PPE verification → geometric association → temporal memory → compliance events</text>
+
+  <!-- ================= INPUT ================= -->
+  <g>
+    <rect x="30" y="130" width="170" height="120" rx="12" fill="#64748b"/>
+    <text x="115" y="165" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">INPUT</text>
+    <text x="115" y="188" fill="#e2e8f0" font-size="12" text-anchor="middle">CCTV · RTSP</text>
+    <text x="115" y="206" fill="#e2e8f0" font-size="12" text-anchor="middle">Video file · Image</text>
+    <text x="115" y="224" fill="#cbd5e1" font-size="11" text-anchor="middle">per-frame stream</text>
+  </g>
+
+  <line x1="200" y1="190" x2="252" y2="190" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ================= STAGE A ================= -->
+  <g>
+    <rect x="255" y="120" width="220" height="140" rx="12" fill="#2563eb"/>
+    <text x="365" y="148" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">STAGE A — PERSON</text>
+    <text x="365" y="170" fill="#dbeafe" font-size="12" text-anchor="middle">YOLO11n pretrained on COCO</text>
+    <text x="365" y="188" fill="#dbeafe" font-size="12" text-anchor="middle">class “person” only</text>
+    <text x="365" y="210" fill="#bfdbfe" font-size="11" text-anchor="middle">+ ByteTrack → stable track IDs</text>
+    <text x="365" y="228" fill="#bfdbfe" font-size="11" text-anchor="middle">if no person → PPE stage skipped</text>
+    <text x="365" y="248" fill="#93c5fd" font-size="10" text-anchor="middle" font-style="italic">TensorRT FP16</text>
+  </g>
+
+  <line x1="475" y1="190" x2="527" y2="190" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="501" y="178" fill="#475569" font-size="10" text-anchor="middle">person boxes + IDs</text>
+
+  <!-- ================= STAGE B ================= -->
+  <g>
+    <rect x="530" y="120" width="250" height="140" rx="12" fill="#1d4ed8"/>
+    <text x="655" y="148" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">STAGE B — PPE DETECTION</text>
+    <rect x="545" y="160" width="220" height="38" rx="7" fill="#3b82f6"/>
+    <text x="655" y="177" fill="#eff6ff" font-size="11" text-anchor="middle">B1 · full-frame pass — YOLOv8n (Snehil)</text>
+    <text x="655" y="191" fill="#dbeafe" font-size="10" text-anchor="middle">4 classes: Hardhat / NO-Hardhat / Vest / NO-Vest</text>
+    <rect x="545" y="204" width="220" height="46" rx="7" fill="#60a5fa"/>
+    <text x="655" y="221" fill="#0f172a" font-size="11" text-anchor="middle">B2 · crop + zoom refinement (320 px)</text>
+    <text x="655" y="236" fill="#1e293b" font-size="10" text-anchor="middle">small/distant workers · batch ≤ 4 · 1-in-5 frames</text>
+  </g>
+
+  <line x1="780" y1="190" x2="832" y2="190" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="806" y="178" fill="#475569" font-size="10" text-anchor="middle">PPE boxes</text>
+
+  <!-- ================= STAGE C ================= -->
+  <g>
+    <rect x="835" y="120" width="200" height="140" rx="12" fill="#7c3aed"/>
+    <text x="935" y="148" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">STAGE C — ASSOCIATE</text>
+    <text x="935" y="170" fill="#ede9fe" font-size="11" text-anchor="middle">geometric ownership rules</text>
+    <text x="935" y="188" fill="#ddd6fe" font-size="11" text-anchor="middle">helmet ⇒ head band</text>
+    <text x="935" y="204" fill="#ddd6fe" font-size="11" text-anchor="middle">vest ⇒ torso band</text>
+    <text x="935" y="222" fill="#c4b5fd" font-size="10" text-anchor="middle">IoA · size gates · best-owner</text>
+    <text x="935" y="238" fill="#c4b5fd" font-size="10" text-anchor="middle">unowned PPE → discarded</text>
+  </g>
+
+  <line x1="1035" y1="190" x2="1087" y2="190" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="1061" y="178" fill="#475569" font-size="10" text-anchor="middle">evidence</text>
+
+  <!-- ================= STAGE D ================= -->
+  <g>
+    <rect x="1090" y="120" width="120" height="140" rx="12" fill="#0d9488"/>
+    <text x="1150" y="150" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">STAGE D</text>
+    <text x="1150" y="170" fill="#ccfbf1" font-size="11" text-anchor="middle">TEMPORAL</text>
+    <text x="1150" y="186" fill="#ccfbf1" font-size="11" text-anchor="middle">MEMORY</text>
+    <text x="1150" y="208" fill="#99f6e4" font-size="10" text-anchor="middle">per-ID score</text>
+    <text x="1150" y="222" fill="#99f6e4" font-size="10" text-anchor="middle">hysteresis</text>
+    <text x="1150" y="236" fill="#99f6e4" font-size="10" text-anchor="middle">anti-flicker</text>
+  </g>
+
+  <!-- D → Compliance (down) -->
+  <line x1="1150" y1="260" x2="1150" y2="318" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ================= COMPLIANCE ENGINE ================= -->
+  <g>
+    <rect x="835" y="320" width="375" height="120" rx="12" fill="#16a34a"/>
+    <text x="1022" y="350" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">COMPLIANCE ENGINE + EVENT LOG</text>
+    <text x="1022" y="374" fill="#dcfce7" font-size="12" text-anchor="middle">confirmed violations only (≥ N stable frames per track)</text>
+    <text x="1022" y="394" fill="#dcfce7" font-size="12" text-anchor="middle">event table: ID · PPE type · start · end · duration</text>
+    <text x="1022" y="416" fill="#bbf7d0" font-size="11" text-anchor="middle" font-style="italic">planned: danger zones · Telegram alerts · CSV compliance report</text>
+  </g>
+
+  <line x1="835" y1="380" x2="783" y2="380" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- ================= OUTPUT ================= -->
+  <g>
+    <rect x="440" y="320" width="340" height="120" rx="12" fill="#0f172a"/>
+    <text x="610" y="350" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">ANNOTATED OUTPUT — HUD</text>
+    <text x="610" y="374" fill="#e2e8f0" font-size="12" text-anchor="middle">corner-bracket boxes · capsule labels · status bar · FPS</text>
+    <text x="610" y="394" fill="#e2e8f0" font-size="12" text-anchor="middle">violation snapshots (per-event crops)</text>
+    <text x="610" y="416" fill="#94a3b8" font-size="11" text-anchor="middle" font-style="italic">H.264 video · JPG images · DataFrame reports</text>
+  </g>
+
+  <!-- ================= POSE (display-only, side) ================= -->
+  <g>
+    <rect x="255" y="320" width="150" height="120" rx="12" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="330" y="350" fill="#475569" font-size="13" font-weight="700" text-anchor="middle">POSE MODEL</text>
+    <text x="330" y="372" fill="#64748b" font-size="11" text-anchor="middle">YOLO11n-pose</text>
+    <text x="330" y="390" fill="#64748b" font-size="11" text-anchor="middle">display only</text>
+    <text x="330" y="410" fill="#94a3b8" font-size="10" text-anchor="middle" font-style="italic">zero influence on decisions</text>
+  </g>
+  <line x1="405" y1="380" x2="437" y2="380" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+
+  <!-- ================= COLOR LEGEND (classes) ================= -->
+  <g>
+    <rect x="30" y="480" width="620" height="270" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="55" y="515" fill="#0f172a" font-size="15" font-weight="700">Detection color code (what you see on screen)</text>
+
+    <rect x="55" y="535" width="26" height="16" rx="4" fill="#3cc83c"/>
+    <text x="92" y="548" fill="#0f172a" font-size="12">Helmet — compliant</text>
+    <rect x="320" y="535" width="26" height="16" rx="4" fill="#e63232"/>
+    <text x="357" y="548" fill="#0f172a" font-size="12">NO Helmet — violation</text>
+
+    <rect x="55" y="567" width="26" height="16" rx="4" fill="#be d232" fill-opacity="0"/>
+    <rect x="55" y="567" width="26" height="16" rx="4" fill="#bed232"/>
+    <text x="92" y="580" fill="#0f172a" font-size="12">Safety Vest — compliant</text>
+    <rect x="320" y="567" width="26" height="16" rx="4" fill="#ff8c00"/>
+    <text x="357" y="580" fill="#0f172a" font-size="12">NO Safety Vest — violation</text>
+
+    <rect x="55" y="599" width="26" height="16" rx="4" fill="#28a0e6"/>
+    <text x="92" y="612" fill="#0f172a" font-size="12">Person — identity box + track ID</text>
+    <rect x="320" y="599" width="26" height="16" rx="4" fill="#9cc8dc"/>
+    <text x="357" y="612" fill="#0f172a" font-size="12">Not judgeable (head/torso out of frame)</text>
+
+    <rect x="55" y="631" width="26" height="16" rx="4" fill="#aaaaaa"/>
+    <text x="92" y="644" fill="#0f172a" font-size="12">Rejected detection — shown in debug mode</text>
+    <rect x="320" y="631" width="26" height="16" rx="4" fill="#4ab0eb"/>
+    <text x="357" y="644" fill="#0f172a" font-size="12">Skeleton — cosmetic only</text>
+
+    <line x1="55" y1="668" x2="625" y2="668" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="55" y="694" fill="#475569" font-size="12" font-weight="600">Status bar (top edge):</text>
+    <rect x="185" y="681" width="26" height="16" fill="#46c846"/>
+    <text x="218" y="694" fill="#0f172a" font-size="12">all clear</text>
+    <rect x="305" y="681" width="26" height="16" fill="#eb3c3c"/>
+    <text x="338" y="694" fill="#0f172a" font-size="12">active violation on site</text>
+
+    <text x="55" y="726" fill="#94a3b8" font-size="11" font-style="italic">Roadmap classes (already present in the base model’s 10-class head):</text>
+    <text x="55" y="742" fill="#94a3b8" font-size="11" font-style="italic">Mask · Safety Cone · machinery · vehicle — activated in a future release.</text>
+  </g>
+
+  <!-- ================= BLOCK COLOR LEGEND ================= -->
+  <g>
+    <rect x="670" y="480" width="540" height="270" rx="12" fill="#fff" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="695" y="515" fill="#0f172a" font-size="15" font-weight="700">Diagram block colors</text>
+
+    <rect x="695" y="535" width="26" height="16" rx="4" fill="#64748b"/>
+    <text x="732" y="548" fill="#0f172a" font-size="12">Input / interface</text>
+    <rect x="975" y="535" width="26" height="16" rx="4" fill="#2563eb"/>
+    <text x="1012" y="548" fill="#0f172a" font-size="12">Neural detection (Stage A / B)</text>
+
+    <rect x="695" y="567" width="26" height="16" rx="4" fill="#7c3aed"/>
+    <text x="732" y="580" fill="#0f172a" font-size="12">Reasoning / association (Stage C)</text>
+    <rect x="975" y="567" width="26" height="16" rx="4" fill="#0d9488"/>
+    <text x="1012" y="580" fill="#0f172a" font-size="12">Temporal state (Stage D)</text>
+
+    <rect x="695" y="599" width="26" height="16" rx="4" fill="#16a34a"/>
+    <text x="732" y="612" fill="#0f172a" font-size="12">Compliance &amp; reporting</text>
+    <rect x="975" y="599" width="26" height="16" rx="4" fill="#0f172a"/>
+    <text x="1012" y="612" fill="#0f172a" font-size="12">Rendered output</text>
+
+    <rect x="695" y="631" width="26" height="16" rx="4" fill="none" stroke="#94a3b8" stroke-dasharray="5 3"/>
+    <text x="732" y="644" fill="#0f172a" font-size="12">Cosmetic / non-decision path</text>
+    <rect x="975" y="631" width="26" height="16" rx="4" fill="none" stroke="#d97706" stroke-dasharray="5 3"/>
+    <text x="1012" y="644" fill="#0f172a" font-size="12">Planned (next phases)</text>
+
+    <line x1="695" y1="672" x2="1185" y2="672" stroke="#e2e8f0" stroke-width="2"/>
+    <text x="695" y="698" fill="#475569" font-size="12" font-weight="600">Golden rule of this architecture:</text>
+    <text x="695" y="720" fill="#475569" font-size="12">every PPE decision is grounded in a verified person —</text>
+    <text x="695" y="738" fill="#475569" font-size="12">a helmet with no owner is never an alarm.</text>
+  </g>
+
+  <!-- footer -->
+  <text x="30" y="795" fill="#94a3b8" font-size="12">PPE_detection-Sentinel · two-stage compliance pipeline · weights and engines cached on Google Drive · TensorRT FP16 with automatic PyTorch fallback</text>
+  <text x="30" y="815" fill="#cbd5e1" font-size="11" font-style="italic">Base detector: Snehil YOLOv8n (Construction-Site-Safety) · Person/pose: Ultralytics YOLO11 (AGPL-3.0)</text>
+</svg>

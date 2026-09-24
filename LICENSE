@@ -1,0 +1,18 @@
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
+
+This repository (PPE_detection-Sentinel) is licensed under AGPL-3.0.
+
+The PPE detection weights (weights/snehil_best.pt) originate from
+snehilsanyal/Construction-Site-Safety-PPE-Detection, and the person/pose
+models (yolo11n.pt, yolo11n-pose.pt) are provided by Ultralytics —
+both under the AGPL-3.0 license. This project inherits AGPL-3.0 as a
+whole. See https://www.gnu.org/licenses/agpl-3.0.txt for the full text,
+which is incorporated here by reference in its entirety.
+
+A practical summary (not legal advice):
+- You may use, study, modify and redistribute this software.
+- If you run a modified version as a network service, you must offer
+  its source code to the users of that service.
+- Commercial licensing is available from Ultralytics for the YOLO11
+  components if your use case requires it.

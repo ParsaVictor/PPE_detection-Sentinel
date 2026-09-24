@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+engines/
+outputs/
+inputs/
+*.engine
+.DS_Store
+Thumbs.db
+.mimosa/
