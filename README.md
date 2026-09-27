@@ -61,6 +61,15 @@ Vanilla PPE detectors (including the excellent base model this project builds on
 
 ![Architecture](assets/architecture.svg)
 
+<details>
+<summary><b>📐 Detailed diagram in Persian — with exact gate values and the temporal-memory formula</b></summary>
+
+&nbsp;
+
+![Sentinel Architecture — detailed Persian diagram](assets/architecture_fa.svg)
+
+</details>
+
 | Stage | What happens |
 |---|---|
 | **A — Person** | YOLO11n pretrained on **COCO** (person class only) + **ByteTrack** → stable IDs. No person in frame? The PPE model never runs. |
@@ -231,6 +240,8 @@ Local use works the same way: clone the repo, `pip install -r requirements.txt`,
 4. سرعت با TensorRT حدود ۲.۵ برابر شده و اسکلت بدن فقط برای نمایش رسم می‌شود.
 
 نتیجه روی ویدئوی آزمایشی: آلارم الکی **صفر**، ۱۱۹۰ تشخیص پذیرفته از ۱۲۰۰، و به‌جای صدها باکس پراکنده، **یک رخداد پایدار و درست**.
+
+نمودار تفصیلی معماری به فارسی — با مقادیر دقیق گیت‌ها و فرمول حافظهٔ زمانی: [`assets/architecture_fa.svg`](assets/architecture_fa.svg)
 
 اجرای سریع در Colab: نوت‌بوک `Run` را باز کن و سه سلولش را اجرا کن — همه‌ی وزن‌ها داخل همین ریپازیتوری است. نسخه‌ی فارسی نوت‌بوک‌ها در پوشه‌ی `notebooks/fa/` است.
 
