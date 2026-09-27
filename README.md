@@ -17,6 +17,23 @@
 
 ---
 
+## 📑 Contents
+
+- [Demo](#-demo)
+- [Why this exists](#-why-this-exists)
+- [Architecture](#-architecture)
+- [The base model (and the credit it deserves)](#-the-base-model-and-the-credit-it-deserves)
+- [Side-by-side with the base model](#-side-by-side-with-the-base-model)
+- [Output gallery](#-output-gallery)
+- [Quick start (Google Colab, T4 GPU)](#-quick-start-google-colab-t4-gpu)
+- [Notebooks & docs](#-notebooks--docs)
+- [Known limitations](#-known-limitations)
+- [Roadmap](#-roadmap)
+- [Credits & lineage](#-credits--lineage)
+- [فارسی — توضیح کوتاه](#-فارسی--توضیح-کوتاه)
+
+---
+
 ## 🎬 Demo
 
 ![Sentinel live demo — one stable violation event, per-person identity, clean HUD](assets/demo_hero.gif)
@@ -59,7 +76,7 @@ Vanilla PPE detectors (including the excellent base model this project builds on
 
 ## 🏗️ Architecture
 
-![Architecture](assets/architecture.svg)
+![Sentinel four-stage PPE detection architecture diagram: person detection, PPE detection, geometric association, temporal memory](assets/architecture.svg)
 
 <details>
 <summary><b>📐 Detailed diagram in Persian — with exact gate values and the temporal-memory formula</b></summary>
@@ -104,7 +121,7 @@ There are **10 classes** to detect from the dataset:
 
 `'Hardhat', 'Mask', 'NO-Hardhat', 'NO-Mask', 'NO-Safety Vest', 'Person', 'Safety Cone', 'Safety Vest', 'machinery', 'vehicle'`
 
-![Dataset samples](assets/classes_overview.webp)
+![Sample images from the Construction Site Safety dataset showing hardhat, safety vest and other PPE classes](assets/classes_overview.webp)
 
 > Sentinel activates only the 4 PPE-compliance classes and replaces the dataset's own `Person` class with a COCO-pretrained person detector trained on hundreds of thousands of images — far more robust to distance, occlusion and domain shift than any 2.8k-image dataset can be. The remaining classes are a ready-made roadmap.
 
@@ -113,9 +130,9 @@ There are **10 classes** to detect from the dataset:
 
 Final-epoch metrics (mean over all 10 classes): **mAP50 = 0.809 · mAP50-95 = 0.507 · precision = 0.900 · recall = 0.731**
 
-![Training curves](assets/training_results.png)
+![Training curves for the base PPE detector over 100 epochs: loss, precision, recall and mAP](assets/training_results.png)
 
-![Confusion matrix](assets/confusion_matrix.png)
+![Confusion matrix of the base PPE detector across all 10 dataset classes](assets/confusion_matrix.png)
 </details>
 
 ---
@@ -124,7 +141,7 @@ Final-epoch metrics (mean over all 10 classes): **mAP50 = 0.809 · mAP50-95 = 0.
 
 The dev notebook ships a three-panel comparison (raw Snehil / Sentinel / annotated differences with per-detection reasons) plus a match table — every difference between the two outputs is explained:
 
-![Comparison: base model vs Sentinel](assets/comparison.png)
+![Three-panel comparison: raw base-model detections, Sentinel's person-grounded output, and an annotated diff explaining every difference](assets/comparison.png)
 
 **How to read the difference panel:** 🟢 accepted · ⚪ rejected (label = reason) · 🟡 not judgeable · 🔵 duplicate/conflict · 🟣 missing (backend/NMS difference).
 
@@ -148,9 +165,9 @@ The V3 lesson is documented honestly in [`docs/HISTORY.md`](docs/HISTORY.md): po
 
 | Live HUD on site footage | Per-person verdicts |
 |---|---|
-| ![Output 1](assets/output_site.png) | ![Output 2](assets/output_workers.png) |
+| ![Sentinel HUD annotating a construction site camera feed with person and PPE boxes](assets/output_site.png) | ![Sentinel per-person compliance verdicts on two workers, one with a helmet violation](assets/output_workers.png) |
 
-![Difference analysis](assets/output_analysis.png)
+![Side-by-side difference analysis between the base model and Sentinel's output on the same frame](assets/output_analysis.png)
 
 Every violation event also saves a cropped snapshot to `outputs/events/` — ready-made seeds for a fine-tuning dataset on your own site.
 
@@ -202,6 +219,15 @@ Local use works the same way: clone the repo, `pip install -r requirements.txt`,
 | [`notebooks/fa/`](notebooks/fa/) | همین دو نوت‌بوک به فارسی (the same two notebooks in Persian) |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Stage-by-stage design + rejection-reason reference |
 | [`docs/HISTORY.md`](docs/HISTORY.md) | V1 → V4.3 version log with real numbers and failed experiments |
+
+---
+
+## ⚠️ Known limitations
+
+- A helmet held in a hand or resting near — but not on — a head can still pass the geometric gates and be accepted.
+- Errors baked into the base Snehil model (e.g. a yellow shirt read as a safety vest) are not corrected by the association or temporal stages; Sentinel only decides *whether an already-detected box belongs to a person*, not whether the detector's own classification is right.
+- The PPE detector was trained on 2,801 images from one dataset; accuracy on a new site's lighting, camera angle or PPE colors is not guaranteed without fine-tuning.
+- The root fix for both of the above is fine-tuning the PPE model on real site footage — the crops in `outputs/events/` are the intended seed dataset. Full write-up: [`docs/HISTORY.md`](docs/HISTORY.md#lessons).
 
 ---
 
